@@ -9,6 +9,12 @@ To copy this package, run:
 
 ## Texas
 
+### On Windows
+
+Download the file `dist/texas.exe`, it's an executable file that can run directly on your machine. If you want to restrict the cities open your command line (by searching cmd) and type the path to `texas.exe` followed by the cities you want, like I explained in the Python version below.
+
+### Using Python
+
 Run the following in the command line:
 
 ` python texas.py [cities] `
