@@ -3,6 +3,7 @@ from time import sleep
 import requests
 import sys
 import webbrowser
+import urllib.request
 
 
 def open_appointments(cities=None):
@@ -12,8 +13,13 @@ def open_appointments(cities=None):
         if cities is not None and location['city'].lower() not in cities:
             continue
         if location['openTimeslots'] > 0:
-            webbrowser.open(location['url'])
-            success = True
+            contents = urllib.request.urlopen(location['url']).read().decode('utf-8')
+            if 'Appointments are no longer available for this location' in contents:
+                print('nope')
+                success = False
+            else:
+                webbrowser.open(location['url'])
+                success = True
     return success
 
 
