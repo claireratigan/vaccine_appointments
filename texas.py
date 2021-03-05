@@ -14,10 +14,7 @@ def open_appointments(cities=None):
             continue
         if location['openTimeslots'] > 0:
             contents = urllib.request.urlopen(location['url']).read().decode('utf-8')
-            if 'Appointments are no longer available for this location' in contents:
-                print('nope')
-                success = False
-            else:
+            if 'Appointments are no longer available for this location' not in contents:
                 webbrowser.open(location['url'])
                 success = True
     return success
