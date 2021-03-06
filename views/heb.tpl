@@ -5,7 +5,7 @@
             <div class="hero-body">
                 <div class="container">
                     <div class="content">
-                        <h4 class="title is-4 is-spaced">Appointments</h4>
+                        <h4 class="title is-4 is-spaced">Cities</h4>
                         <div class="main-text">
                             %for row in data:
                             <div class="box">
