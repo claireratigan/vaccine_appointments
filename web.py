@@ -1,9 +1,13 @@
-import os,requests
+import os
+from urllib.request import urlopen
+import json
 from bottle import route, template, redirect, error, run
 from operator import itemgetter
 
-def get_appointments_data(location) :
-    locationData = requests.get('https://heb-ecom-covid-vaccine.hebdigital-prd.com/vaccine_locations.json').json()['locations']
+
+def get_appointments_data(location):
+    locationData = json.loads(urlopen(
+        'https://heb-ecom-covid-vaccine.hebdigital-prd.com/vaccine_locations.json').read())['locations']
     return [x for x in locationData if x['city'].lower() == location]
 
 
@@ -17,9 +21,11 @@ def make_request(location):
     location = location.lower()
     # API request
     locationData = get_appointments_data(location)
-    locationData =  sorted(locationData, key=itemgetter('openTimeslots'), reverse=True)
-    return template('heb', data=locationData,loc=location)
-    
+    locationData = sorted(locationData, key=itemgetter(
+        'openTimeslots'), reverse=True)
+    return template('heb', data=locationData, loc=location)
+
+
 @error(404)
 def error404(error):
     return template('error', error_msg='404 error. Nothing to see here')
