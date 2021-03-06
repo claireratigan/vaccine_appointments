@@ -1,19 +1,33 @@
 import os
 from urllib.request import urlopen
 import json
+import pandas as pd
+from pandas.io.json import json_normalize
 from bottle import route, template, redirect, error, run
 from operator import itemgetter
 
 
 def get_appointments_data(location):
-    locationData = json.loads(urlopen(
+    jsonData = json.loads(urlopen(
         'https://heb-ecom-covid-vaccine.hebdigital-prd.com/vaccine_locations.json').read())['locations']
-    return [x for x in locationData if x['city'].lower() == location]
+    locationData = json_normalize(jsonData)
+    return locationData if location is None else locationData[locationData.city.str.lower() == location]
 
 
 @route('/')
 def handle_root_url():
-    redirect('/heb/houston')
+    redirect('/heb')
+
+
+@route('/heb')
+def make_request():
+    # API request
+    locationData = get_appointments_data(None)  # [['city','openTimeslots']]
+    locationData = locationData.groupby(by='city', as_index=False)[
+        'openTimeslots'].sum()
+    locationData = locationData.sort_values(
+        by='openTimeslots',  ascending=False)
+    return template('heb', data=locationData.to_dict('r'))
 
 
 @route('/heb/<location>')
@@ -21,9 +35,9 @@ def make_request(location):
     location = location.lower()
     # API request
     locationData = get_appointments_data(location)
-    locationData = sorted(locationData, key=itemgetter(
-        'openTimeslots'), reverse=True)
-    return template('heb', data=locationData, loc=location)
+    locationData = locationData.sort_values(
+        by='openTimeslots',  ascending=False)
+    return template('city', data=locationData.to_dict('records'), loc=location)
 
 
 @error(404)

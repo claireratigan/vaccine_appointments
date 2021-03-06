@@ -5,14 +5,17 @@
             <div class="hero-body">
                 <div class="container">
                     <div class="content">
-                        <h4 class="title is-4 is-spaced">Appointments</h4>
+                        <h4 class="title is-4 is-spaced"> {{loc.capitalize()}} Appointments</h4>
                         <div class="main-text">
                             %for row in data:
                             <div class="box">
                                 <div class="columns is-mobile">
                                     <div class="column is-four-fifths">
-                                        <div class="container ">
-                                            <h1 class="title is-5"><a href="/heb/{{row['city'].lower()}}">{{row['city'].capitalize()}}</a></h1>
+                                        <div class="container center">
+                                            <h1 class="title is-5"><a href="{{row['url']}}">{{row['name']}}</a></h1>
+                                            <address class="subtitle is-7">
+                                                {{row['street']}}, {{row['city']}} {{row['state']}} {{row['zip']}}
+                                                </adress>
                                         </div>
                                     </div>
                                     <div class="column">
