@@ -1,7 +1,8 @@
 from time import sleep
+from urllib.request import urlopen
 
 import argparse
-import requests
+import json
 import sys
 from tqdm import tqdm
 import webbrowser
@@ -15,8 +16,7 @@ store_name_to_distance = {}
 
 
 def open_appointments(namespace, geolocator):
-    locations = requests.get('https://heb-ecom-covid-vaccine.hebdigital-prd.com/vaccine_locations.json').json()[
-        'locations']
+    locations = json.loads(urlopen('https://heb-ecom-covid-vaccine.hebdigital-prd.com/vaccine_locations.json').read())['locations']
     success = False
     for location in locations:
         if namespace.cities is not None and location['city'].lower() not in namespace.cities:
