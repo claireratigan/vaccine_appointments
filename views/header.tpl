@@ -9,7 +9,7 @@
                 <div class="header-buttons">
                     <span class="control">
                         <a class="button is-dark is-clickable"
-                            href="https://github.com/TheIronicCurtain/vaccine_appointments">
+                            href="https://github.com/Hobbs1210/vaccine_appointments">
                             <span class="icon">
                                 <i class="fa fa-github"></i>
                             </span>

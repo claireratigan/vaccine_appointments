@@ -14,6 +14,22 @@ def get_appointments_data(location):
     return locationData if location is None else locationData[locationData.city.str.lower() == location]
 
 
+def get_location_appointments(location):
+    locationData = get_appointments_data(location)
+    locationData = locationData.sort_values(
+        by='openTimeslots',  ascending=False)
+    return locationData.to_dict('r')
+
+
+def get_location_grouped():
+    locationData = get_appointments_data(None)
+    locationData = locationData.groupby(by='city', as_index=False)[
+        'openTimeslots'].sum()
+    locationData = locationData.sort_values(
+        by='openTimeslots',  ascending=False)
+    return locationData.to_dict('r')
+
+
 @route('/')
 def handle_root_url():
     redirect('/heb')
@@ -21,23 +37,13 @@ def handle_root_url():
 
 @route('/heb')
 def make_request():
-    # API request
-    locationData = get_appointments_data(None)  # [['city','openTimeslots']]
-    locationData = locationData.groupby(by='city', as_index=False)[
-        'openTimeslots'].sum()
-    locationData = locationData.sort_values(
-        by='openTimeslots',  ascending=False)
-    return template('heb', data=locationData.to_dict('r'))
+    return template('heb', data=get_location_grouped())
 
 
 @route('/heb/<location>')
 def make_request(location):
     location = location.lower()
-    # API request
-    locationData = get_appointments_data(location)
-    locationData = locationData.sort_values(
-        by='openTimeslots',  ascending=False)
-    return template('city', data=locationData.to_dict('records'), loc=location)
+    return template('city', data=get_location_appointments(location), loc=location)
 
 
 @error(404)

@@ -3,6 +3,7 @@
 
 <head>
     <title>{{title}}</title>
+    <meta http-equiv="refresh" content="5" >
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
