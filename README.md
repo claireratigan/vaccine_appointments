@@ -27,6 +27,10 @@ The loop will stop running once it finds a page to open, so if you don't get the
 
 If you feel comfortable installing a few Python packages, the required packages are in `requirements.txt`
 
+All you need to do to install the required packages is navigate to the repository and run the following line in the command line (assuming you have Python installed):
+
+`python -m pip install -r requirements.txt`
+
 Run `python texas_fancy.py --help` for usage:
 
 ```
