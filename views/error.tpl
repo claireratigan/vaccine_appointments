@@ -1,7 +1,7 @@
 <div class="content-block">
     <div class="container"></div>
         <div class="notification is-danger is-light">
-            {{error}}
+            {{error_msg}}
         </div>
     </div>
 </div>
