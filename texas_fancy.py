@@ -81,5 +81,5 @@ if __name__ == '__main__':
     reported_appointments = []
     with tqdm() as pbar:
         while not open_appointments(ns, geolocator, reported_appointments):
-            sleep(.25)
+            sleep(1)
             pbar.update(1)
