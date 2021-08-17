@@ -1,6 +1,5 @@
 # Vaccine Appointments
-Automatically searching for vaccine appointments
-**[Live Updates](https://vaccine-appointments.herokuapp.com/heb)**
+**[Automatically searching for vaccine appointments](https://vaccine-appointments.herokuapp.com/heb)**
 
 # Usage
 
