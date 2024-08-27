@@ -5,7 +5,7 @@ Automatically searching for vaccine appointments
 
 To copy this package, run:
 
-`git clone https://github.com/TheIronicCurtain/vaccine_appointments`
+`git clone https://github.com/claireratigan/vaccine_appointments`
 
 ## Texas
 
