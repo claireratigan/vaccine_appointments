@@ -7,6 +7,7 @@ import sys
 from tqdm import tqdm
 import webbrowser
 import urllib.request
+import winsound as sound
 
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
@@ -15,7 +16,7 @@ from geopy.distance import geodesic
 store_name_to_distance = {}
 
 
-def open_appointments(namespace, geolocator):
+def open_appointments(namespace, geolocator, reported_appointments):
     locations = json.loads(urlopen('https://heb-ecom-covid-vaccine.hebdigital-prd.com/vaccine_locations.json').read())['locations']
     success = False
     for location in locations:
@@ -38,14 +39,20 @@ def open_appointments(namespace, geolocator):
                 store_name_to_distance[location['name']] = distance
             if distance.miles > namespace.distance:
                 continue
-        if location['openTimeslots'] > 0:
+        if location['openTimeslots'] > 0 and location['url'] not in reported_appointments:
             contents = urllib.request.urlopen(location['url']).read().decode('utf-8')
             if 'Appointments are no longer available for this location' not in contents:
                 webbrowser.open(location['url'])
                 print('\n'.join(f'{k}={v}' for k, v in location.items() if k not in ['url', 'slotDetails'] and v is not None))
                 if distance is not None:
                     print(f'Distance from home: {distance.miles} miles')
-                success = True
+                if location['openTimeslots'] > 1:
+                    success = True
+                    for i in range(300):
+                        sound.Beep(2500, 300)
+                else:
+                    sound.Beep(2500, 300)
+                reported_appointments.append(location['url'])
     return success
 
 
@@ -57,6 +64,7 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--distance', type=float,
                         help='Maximum distance (in miles) from home (requires home)')
     parser.add_argument('-Z', '--zipcodes', nargs='+', help='Zipcodes to restrict the search to')
+    # parser.add_argument('-V', '-v', '--vaccines', nargs='+', help = 'Vaccines to restrict (JJ, M, P)')
 
     ns = parser.parse_args(sys.argv[1:])
 
@@ -70,7 +78,8 @@ if __name__ == '__main__':
         home = geolocator.geocode(ns.home)
         ns.latlong = (home.latitude, home.longitude)
         print(f'Looking for appointments {ns.distance} miles from {home}')
+    reported_appointments = []
     with tqdm() as pbar:
-        while not open_appointments(ns, geolocator):
+        while not open_appointments(ns, geolocator, reported_appointments):
             sleep(1)
             pbar.update(1)
